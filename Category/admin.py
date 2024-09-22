@@ -12,16 +12,6 @@ class CollectionAdmin(admin.ModelAdmin):
     search_fields = ['title']
     autocomplete_fields = ['featured_product']
 
-    @admin.display(ordering='product_count')
-    def product_count(self, collection):
-        # reverse('admin:app_model_page') target page links:
-        related_url = reverse('admin:store_product_changelist')\
-        + '?' + urlencode({
-            'collection_id': str(collection.pk)
-        })
-        # make a value of a field to clickable and ralate to links.
-        return format_html(f'<a href="{related_url}">{collection.product_count}</a>')
-
     def get_queryset(self, request):
         return super().get_queryset(request).annotate(
             product_count = Count('products')
