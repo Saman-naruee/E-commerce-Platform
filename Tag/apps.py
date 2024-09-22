@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class userConfig(AppConfig):
+class TagConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'user'
+    name = 'Tag'
