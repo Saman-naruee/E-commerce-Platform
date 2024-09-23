@@ -2,23 +2,25 @@ from typing import Any
 from django.contrib import admin
 from django.contrib import admin, messages
 from .models import Product
-# from Filters.filter import ProductFilter
+from Tag.models import TaggedItem
+from django.contrib.contenttypes.admin import GenericTabularInline
+
 
 class ProductInventoryFilter(admin.SimpleListFilter):
     title = 'Inventory'
     parameter_name = 'inventory'
-    def lookups(self, request: Any, model_admin: Any) -> list[tuple[Any, str]]:
+    def lookups(self, request, model_admin):
         return [
             ('<10', 'Low'),
             ('>30', 'Ok'), 
         ]
-    def queryset(self, request: Any, queryset):
+    def queryset(self, request, queryset):
         if self.value() == '<10':
             return queryset.filter(inventory__lt=10)
         elif self.value() == '>30':
             return queryset.filter(inventory__gt=30)
 
-@admin.register(Product)
+
 class ProductAdmin(admin.ModelAdmin):
     autocomplete_fields = ['collection']
     prepopulated_fields = {
@@ -46,3 +48,10 @@ class ProductAdmin(admin.ModelAdmin):
             messages.SUCCESS
         )
 
+class TaggedInline(GenericTabularInline):
+    model = TaggedItem
+    autocomplete_fields = ['tag']
+class CustomProductAdmin(ProductAdmin):
+    inlines = [TaggedInline]
+
+admin.site.register(Product, CustomProductAdmin)

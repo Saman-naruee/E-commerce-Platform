@@ -6,7 +6,7 @@ from django.db.models import Count
 
 
 @admin.register(Category)
-class CollectionAdmin(admin.ModelAdmin):
+class CategoryAdmin(admin.ModelAdmin):
     list_display = ['title', 'product_count'] # second field: to find out how many products we have related to collection.
     list_per_page = 20
     search_fields = ['title']
